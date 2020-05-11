@@ -19,7 +19,7 @@ test:
 .PHONY: migrate-up
 migrate-up:
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' up $(N) \
+	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' up $(N) || \
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
 	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' force $(N); \
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
@@ -28,7 +28,7 @@ migrate-up:
 .PHONY: migrate-down
 migrate-down:
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' down $(N) \
+	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' down $(N) || \
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
         -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' force $(N); \
         docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
