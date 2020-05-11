@@ -46,6 +46,7 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -60,17 +61,16 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	// client, err := gorm.Open(
-	// 	"mysql",
-	// 	"user:password@/default?charset=utf8mb4&parseTime=True&loc=Local")
-	// if err != nil {
-	// 	log.Fatalf("gorm.open: %v", err)
-	// }
-	//db, err := newDB(client)
-	//if err != nil {
-	//	log.Fatalf("newDB: %v", err)
-	//}
-	db := newMemoryDB()
+	client, err := gorm.Open(
+		"mysql",
+		"user:password@/default?charset=utf8mb4&parseTime=True&loc=Local")
+	if err != nil {
+		log.Fatalf("gorm.open: %v", err)
+	}
+	db, err := newDB(client)
+	if err != nil {
+		log.Fatalf("newDB: %v", err)
+	}
 	b, err := NewBookshelf(db)
 	if err != nil {
 		log.Fatalf("NewBookshelf: %v", err)
