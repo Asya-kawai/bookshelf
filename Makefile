@@ -33,3 +33,7 @@ migrate-down:
         -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' force $(N); \
         docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
         -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' version || true
+
+.PHONY: build
+build:
+	go build .

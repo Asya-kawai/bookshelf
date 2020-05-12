@@ -12,8 +12,9 @@ services:
       MYSQL_PASSWORD: password
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-    - ./var/lib/mysql:/var/lib/mysql
-    - ./etc/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
+    # ### Should use default volume path.
+    #volumes:
+    #- ./var/lib/mysql:/var/lib/mysql
+    #- ./etc/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
     - 3306:3306
