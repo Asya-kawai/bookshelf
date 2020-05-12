@@ -1,0 +1,1 @@
+gcloud container clusters create bookshelf-demo --preemptible --machine-type=g1-small --num-nodes 1 --disk-size 30 --zone us-central1-b

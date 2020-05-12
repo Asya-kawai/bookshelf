@@ -1,0 +1,34 @@
+steps:
+# This step builds the container image.
+# available variables: https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values?hl=ja
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '-t'
+  - 'gcr.io/$PROJECT_ID/bookshelf:$SHORT_SHA'
+  - '.'
+
+# This step pushes the image to Container Registry.
+# available variables: https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values?hl=ja
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+  - 'push'
+  - 'gcr.io/$PROJECT_ID/bookshelf:$SHORT_SHA'
+
+# This step runs the small tests on the app.
+- name: 'gcr.io/$PROJECT_ID/bookshelf:$SHORT_SHA'
+  id: SmallTest
+  entrypoint: /bin/sh
+  args:
+  - -c
+  - 'make db-down; make db-up; sleep 10 && make migrate-up N=1; make test-db'
+
+# This step runs the medium tests on the app.
+- name: 'gcr.io/$PROJECT_ID/bookshelf:$SHORT_SHA'
+  id: MediumTest
+  entrypoint: /bin/sh
+  args:
+  - -c
+  - 'make db-down; make db-up; sleep 10 && make migrate-down N=1; make migrate-up N=1; make test-main'

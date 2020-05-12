@@ -3,7 +3,7 @@ FROM golang:alpine3.11 AS base
 WORKDIR /app/bookshelf
 
 RUN apk update; \
-    apk add make gcc g++
+    apk add make gcc g++ docker docker-compose
 
 COPY . /app/bookshelf/
 RUN go mod download

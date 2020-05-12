@@ -3,6 +3,15 @@ VERSION = v1.0.0
 
 export GO111MODULE = on
 
+.PHONY: db-up
+db-up:
+	#docker network create bookshelf
+	docker-compose up -d
+
+.PHONY: db-down
+db-down:
+	docker-compose down
+
 .PHONY: test-db
 test-db:
 	go test -v db_test.go db_mysql.go bookshelf.go db_memory.go
@@ -19,20 +28,12 @@ test:
 .PHONY: migrate-up
 migrate-up:
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' up $(N) || \
-	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' force $(N); \
-	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-        -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' version || true
+	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' goto $(N)
 
 .PHONY: migrate-down
 migrate-down:
 	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' down $(N) || \
-	docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-        -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' force $(N); \
-        docker run -v $(PWD)/migrations:/migrations --network host migrate/migrate \
-        -path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' version || true
+	-path=/migrations/ -database 'mysql://user:password@tcp(localhost:3306)/default' down $(N)
 
 .PHONY: build
 build:

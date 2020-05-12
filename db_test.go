@@ -31,6 +31,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -80,9 +81,17 @@ func TestMemoryDB(t *testing.T) {
 }
 
 func TestMysqlDB(t *testing.T) {
+	DBHost := os.Getenv("DB_HOST")
+	if DBHost == "" {
+		DBHost = "localhost"
+	}
+	DBPort := os.Getenv("DB_PORT")
+	if DBPort == "" {
+		DBPort = "3306"
+	}
 	client, err := gorm.Open(
 		"mysql",
-		"user:password@/default?charset=utf8mb4&parseTime=True&loc=Local")
+		"user:password@("+DBHost+":"+DBPort+")/default?charset=utf8mb4&parseTime=True&loc=Local")
 	if err != nil {
 		t.Fatalf("gorm.open: %v", err)
 	}
